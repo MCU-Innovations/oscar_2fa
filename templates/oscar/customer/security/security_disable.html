@@ -1,0 +1,16 @@
+{% extends "oscar/customer/baseaccountpage.html" %}
+{% load i18n %}
+{% load two_factor_tags %}
+
+{% block tabcontent %}
+
+  <p>{% blocktrans trimmed %}You are about to disable two-factor authentication. This
+    weakens your account security, are you sure?{% endblocktrans %}</p>
+  <form method="post">
+    {% csrf_token %}
+    <table>{{ form.as_table }}</table>
+    <button class="btn btn-danger"
+            type="submit">{% trans "Disable" %}</button>
+  </form>    
+
+{% endblock %}
