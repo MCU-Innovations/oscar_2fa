@@ -41,10 +41,25 @@
               These tokens have been generated for you to print and keep safe. Please
               enter one of these backup tokens to login to your account.{% endblocktrans %}</p>
           {% endif %}
+
+          {% if form.errors %}
+              {% for field in form %}
+                  {% for error in field.errors %}
+                      <div class="alert alert-danger">
+                          <strong>{{ error|escape }}</strong>
+                      </div>
+                  {% endfor %}
+              {% endfor %}
+              {% for error in form.non_field_errors %}
+                  <div class="alert alert-danger">
+                      <strong>{{ error|escape }}</strong>
+                  </div>
+              {% endfor %}
+          {% endif %}
         
           <form id="login_form" action="{{ request.get_full_path }}" method="post">
             {% csrf_token %}
-            {% include "_two_factor/_wizard_forms.html" %}
+            {% include "oscar/partials/_wizard_forms.html" %}
         
             {# hidden submit button to enable [enter] key #}
             <input name="login_submit" type="submit" value="" hidden />
@@ -60,7 +75,7 @@
               {% endfor %}</p>
             {% endif %}
         
-            {% include "_two_factor/_wizard_actions.html" %}
+            {% include "oscar/partials/_wizard_actions.html" %}
           </form>
         
           {% block 'backup_tokens' %}

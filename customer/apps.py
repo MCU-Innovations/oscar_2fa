@@ -18,6 +18,7 @@ class CustomerConfig(apps.CustomerConfig):
         self.security_setup_complete_view = get_class(
             "customer.views", "SecuritySetupCompleteView"
         )
+        self.security_denied_view = get_class("customer.views", "SecurityDeniedView")
         self.security_qr = get_class("customer.views", "SecurityQR")
 
     def get_urls(self):
@@ -52,6 +53,11 @@ class CustomerConfig(apps.CustomerConfig):
                 "security/complete/",
                 login_required(self.security_setup_complete_view.as_view()),
                 name="security-setup-complete-view",
+            ),
+            path(
+                "security/denied/",
+                login_required(self.security_denied_view.as_view()),
+                name="security-denied",
             ),
         ]
         return urls

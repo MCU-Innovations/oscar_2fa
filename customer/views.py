@@ -1,13 +1,9 @@
-import qrcode
 from django.utils.translation import gettext_lazy as _
-from oscar.core.loading import get_classes
 from django.shortcuts import redirect
 from django.conf import settings
 from django.contrib import messages
-from django.http import HttpResponse
-from django.utils.module_loading import import_string
+from oscar.core.loading import get_classes
 import two_factor.views
-from two_factor.utils import get_otpauth_url, totp_digits
 
 PageTitleMixin, RegisterUserMixin = get_classes(
     "customer.mixins", ["PageTitleMixin", "RegisterUserMixin"]
@@ -65,6 +61,17 @@ class SecurityBackupTokenView(PageTitleMixin, two_factor.views.BackupTokensView)
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["page_title"] = _("Backup Tokens")
+        context["active_tab"] = "security"
+        return context
+
+
+class SecurityDeniedView(PageTitleMixin, two_factor.views.SetupView):
+    template_name = "oscar/customer/security/security_denied.html"
+    success_url = "customer:security-denied"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = _("Permission Denied")
         context["active_tab"] = "security"
         return context
 
